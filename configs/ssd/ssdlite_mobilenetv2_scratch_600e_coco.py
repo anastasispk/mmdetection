@@ -7,6 +7,7 @@ model = dict(
     backbone=dict(
         type='MobileNetV2',
         out_indices=(4, 7),
+        frozen_stages=7,
         norm_cfg=dict(type='BN', eps=0.001, momentum=0.03),
         init_cfg=dict(type='TruncNormal', layer='Conv2d', std=0.03)),
     neck=dict(
@@ -137,12 +138,13 @@ lr_config = dict(
 runner = dict(type='EpochBasedRunner', max_epochs=120)
 
 # Avoid evaluation and saving weights too frequently
-evaluation = dict(interval=5, metric='bbox')
-checkpoint_config = dict(interval=5)
+evaluation = dict(interval=1, metric='bbox')
+checkpoint_config = dict(interval=1)
 custom_hooks = [
     dict(type='NumClassCheckHook'),
     dict(type='CheckInvalidLossHook', interval=50, priority='VERY_LOW')
 ]
+
 
 # NOTE: `auto_scale_lr` is for automatically scaling LR,
 # USER SHOULD NOT CHANGE ITS VALUES.
